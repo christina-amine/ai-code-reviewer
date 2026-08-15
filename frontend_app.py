@@ -11,6 +11,9 @@ from typing import Optional
 
 # Configuration
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
+# Ensure HTTPS for internal domain
+if "railway.internal" in BACKEND_URL and not BACKEND_URL.startswith("https://"):
+    BACKEND_URL = f"https://{BACKEND_URL}"
 
 # Page config
 st.set_page_config(
@@ -99,9 +102,9 @@ def call_backend(endpoint: str, method: str = "GET", data: dict = None, params: 
     try:
         url = f"{BACKEND_URL}{endpoint}"
         if method == "POST":
-            response = requests.post(url, json=data, params=params, timeout=300)
+            response = requests.post(url, json=data, params=params, timeout=300, verify=False)
         else:
-            response = requests.get(url, params=params, timeout=10)
+            response = requests.get(url, params=params, timeout=10, verify=False)
 
         if response.status_code >= 400:
             st.error(f"Error: {response.status_code} - {response.text}")
@@ -320,3 +323,4 @@ st.markdown("""
 - 🔍 Detect bugs, security issues, and improvements
 - 💡 Get AI-powered suggestions
 """)
+
