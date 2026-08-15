@@ -11,9 +11,6 @@ from typing import Optional
 
 # Configuration
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
-# Ensure HTTPS for internal domain
-if "railway.internal" in BACKEND_URL and not BACKEND_URL.startswith("https://"):
-    BACKEND_URL = f"https://{BACKEND_URL}"
 
 # Page config
 st.set_page_config(
